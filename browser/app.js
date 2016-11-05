@@ -43,7 +43,7 @@ angular.module('app', ['ui.router'])
         }
       });
 
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/generator');
   })
   .factory('Generator', function(){
     return function(app){
