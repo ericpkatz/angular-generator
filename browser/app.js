@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap'])
+angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap', 'hljs'])
   .config(function($stateProvider, $urlRouterProvider){
     $stateProvider
       .state('home', {
