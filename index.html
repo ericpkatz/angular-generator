@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.css' />
+    <script src='/angular/angular.js'></script>
+    <script src='/angular-ui-router/release/angular-ui-router.js'></script>
+    <script src='/browser/app.js'></script>
+  </head>
+  <body ng-app='app'>
+    <div class='container'>
+      <h1>Angular Application Generator</h1>
+      <ul class='nav nav-tabs' style='margin-bottom:10px'>
+        <li ui-sref-active='active'>
+          <a ui-sref='home'>Home</a>
+        </li>
+        <li ui-sref-active='active'>
+          <a ui-sref='generator'>App Generator</a>
+        </li>
+      </ul>
+      <ui-view><ui-view>
+    </div>
+  </body>
+</html>
