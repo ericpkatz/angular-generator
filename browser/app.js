@@ -37,7 +37,7 @@ angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap'])
             $scope.app = {
               name: 'Foo',
               model: {
-                name: 'bar'
+                name: 'Bar'
               }
             };
           }
