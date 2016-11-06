@@ -1,5 +1,5 @@
 angular.module('app')
-  .factory('Generator', function($window){
+  .factory('Generator', function($window, NavGenerator){
     return function(app){
       var camelCase = $window.camelCase;
       var deCamelCase = $window.deCamelCase;
@@ -187,17 +187,7 @@ angular.module('app')
   <div class='container'>
     <h1>My Angular App "{{appName}}"</h1>
 
-    <ul id='mainNav' class='nav nav-tabs'>
-      <li ui-sref-active='active'>
-        <a ui-sref='home'>Home</a>
-      </li>
-      <li ui-sref-active='active'>
-        <a ui-sref='about'>About</a>
-      </li>
-      <li ui-sref-active='active'>
-        <a ui-sref='${inflect.pluralize(camelCase(app.model.name))}'>${inflect.pluralize(camelCase(app.model.name))}</a>
-      </li>
-    </ul>
+    ${NavGenerator(app)}
 
     <${decamelCase(app.model.name, '-')}-status></${decamelCase(app.model.name, '-')}-status>
 
