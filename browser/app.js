@@ -4,28 +4,7 @@ angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap', 'hljs', 'schemaFo
       .state('home', {
         url: '/',
         templateUrl: '/browser/templates/home.html',
-        controller: function($scope, $uibModal){
-          $scope.open = function(){
-            var modalInstance = $uibModal.open({
-              templateUrl: '/browser/templates/modal.html',
-              controller: function($scope){
-                $scope.ok = function(){
-                  modalInstance.close();
-                };
-                $scope.cancel = function(){
-                  modalInstance.dismiss();
-                };
-              }
-            });
-            modalInstance.result
-              .then(function(){
-                console.log('you clicked ok');
-              })
-              .catch(function(){
-                console.log('you clicked cancel');
-              })
-          };
-
+        controller: function($scope){
         }
       })
       .state('generator', {
@@ -41,7 +20,7 @@ angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap', 'hljs', 'schemaFo
                 items: {
                   type: 'object',
                   properties: {
-                    name: { type: "string", minLength: 2, title: "Name", description: "Model name." },
+                    name: { type: "string", minLength: 2, title: "Name"},
                   }
                 }
               }
@@ -100,7 +79,12 @@ angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap', 'hljs', 'schemaFo
         templateUrl: '/browser/templates/generated.html',
         resolve: {
           code: function($stateParams, Generator){
-            return Generator(JSON.parse($stateParams.app));
+            try{
+              return Generator(JSON.parse($stateParams.app));
+            }
+            catch(er){
+              console.log(er);
+            }
           }
         },
         controller: function($scope, code, $stateParams, $rootScope, $sce){

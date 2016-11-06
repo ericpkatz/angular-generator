@@ -1,5 +1,5 @@
 angular.module('app')
-  .factory('NavGenerator', function($window){
+  .factory('NavGenerator', function($window, ModelGenerators){
       var camelCase = $window.camelCase;
       var deCamelCase = $window.deCamelCase;
       var inflect = $window.inflect;
@@ -12,9 +12,7 @@ angular.module('app')
       <li ui-sref-active='active'>
         <a ui-sref='about'>About</a>
       </li>
-      <li ui-sref-active='active'>
-        <a ui-sref='${inflect.pluralize(camelCase(app.model.name))}'>${inflect.pluralize(camelCase(app.model.name))}</a>
-      </li>
+      ${ModelGenerators.link(app)}
     </ul>
           `;
       }
