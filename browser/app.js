@@ -11,11 +11,10 @@ angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap', 'hljs'])
               controller: function($scope){
                 $scope.ok = function(){
                   modalInstance.close();
-                }
+                };
                 $scope.cancel = function(){
                   modalInstance.dismiss();
-                }
-
+                };
               }
             });
             modalInstance.result

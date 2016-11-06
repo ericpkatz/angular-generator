@@ -93,6 +93,25 @@ angular.module('app')
                   });
               }
             }
+          })
+          .state('${inflect.pluralize(camelCase(app.model.name))}.${camelCase(app.model.name)}', {
+            url: '/:id',
+            templateUrl: '/browser/templates/${camelCase(app.model.name)}.html',
+            resolve: {
+              item: function(${app.model.name}, $stateParams){
+                return ${app.model.name}.findById($stateParams.id);
+              }
+            },
+            controller: function($scope, item, ${app.model.name}, $state, toaster){
+              $scope.item = angular.copy(item, {});
+              $scope.update = function(){
+                ${app.model.name}.update($scope.item)
+                  .then(function(){
+                    toaster.pop('success', '${camelCase(app.model.name)} update', $scope.item );
+                    $state.go('${inflect.pluralize(camelCase(app.model.name))}');
+                  });
+              };
+            }
           });
         $urlRouterProvider.otherwise('/${inflect.pluralize(camelCase(app.model.name))}');
       })
@@ -112,6 +131,12 @@ angular.module('app')
         ];
         return {
           items: _items,
+          findById: function(id){
+            var toReturn = _items.filter(function(_item){
+              return _item.id == id;
+            })[0];
+            return $q.when(toReturn);
+          },
           findAll: function(){
             var dfd = $q.defer();
             dfd.resolve(_items);
@@ -125,6 +150,13 @@ angular.module('app')
             _items.splice(_items.indexOf(toDestroy), 1);
             dfd.resolve(toDestroy);
             return dfd.promise;
+          },
+          update: function(item){
+            var toUpdate = _items.filter(function(_item){
+              return _item.id === item.id;
+            })[0];
+            _items.splice(_items.indexOf(toUpdate), 1, item);
+            return $q.when(item);
           },
           create: function(item){
             var copy = angular.copy(item, {});
@@ -163,7 +195,7 @@ angular.module('app')
         <a ui-sref='about'>About</a>
       </li>
       <li ui-sref-active='active'>
-        <a ui-sref='${inflect.pluralize(camelCase(app.model.name))}'>${app.model.name}s</a>
+        <a ui-sref='${inflect.pluralize(camelCase(app.model.name))}'>${inflect.pluralize(camelCase(app.model.name))}</a>
       </li>
     </ul>
 
@@ -198,7 +230,7 @@ angular.module('app')
     </form>
     <ul class='list-group'>
       <li ng-repeat='item in items' class='list-group-item'>
-        {{ item.name }} {{ item.id }}
+        <a ui-sref='${inflect.pluralize(camelCase(app.model.name))}.${camelCase(app.model.name)}({ id: item.id })'>{{ item.name }} {{ item.id }}</a>
         <div class='btn-group pull-right'>
           <button class='btn btn-secondary btn-primary' ng-click='delete(item)'>
             Delete
@@ -207,6 +239,7 @@ angular.module('app')
         <div class='clearfix'></div>
       </li>
     </ul>
+    <ui-view><ui-view>
   </script>
 
   <script type='text/ng-template' id='/browser/templates/confirm.html'>
@@ -225,9 +258,21 @@ angular.module('app')
     </div>
   </script>
 
+  <script type='text/ng-template' id='/browser/templates/${camelCase(app.model.name)}.html'>
+    <form name='form' class='well'>
+      <div class='form-group'>
+        <input class='form-control' ng-model='item.name' required />
+      </div>
+      <div class='form-group'>
+        <button class='btn btn-primary' ng-disabled='form.$invalid' ng-click='update()'>Update your ${camelCase(app.model.name)}</button>
+        <a class='btn btn-default' ui-sref='${inflect.pluralize(camelCase(app.model.name))}'>Cancel</a>
+      </div>
+    </form>
+  </script>
+
   <script type='text/ng-template' id='/browser/templates/${camelCase(app.model.name)}Status.html'>
     <div class='well'>
-      You current have  {{ items.length }} ${inflect.pluralize(app.model.name)}.
+      There are currently {{ items.length }} ${inflect.pluralize(app.model.name)}.
     </div>
   </script>
 </body>
