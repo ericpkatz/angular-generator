@@ -11,16 +11,34 @@ angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap', 'hljs', 'schemaFo
         url: '/generator',
         templateUrl: '/browser/templates/generator.html',
         controller: function($scope, $state, $stateParams, toaster){
+          if($state.current.name === 'generator'){
+            init();
+            $state.go('generator.generated', { app: JSON.stringify($scope.app) });
+
+          }
           $scope.schema = {
             type: "object",
+            required: ['name'],
             properties: {
-              name: { type: "string", minLength: 2, title: "Name", description: "Application name." },
+              name: {
+                type: "string",
+                title: "Name",
+                description: "Application name.",
+                pattern: "^[A-Za-z]+$"
+              },
+              required: ['models'],
               models: {
                 type: 'array',
+                minItems: 1,
                 items: {
                   type: 'object',
+                  required: ['name'],
                   properties: {
-                    name: { type: "string", minLength: 2, title: "Name"},
+                    name: {
+                      type: "string",
+                      title: "Name",
+                      pattern: "^[A-Za-z]+$"
+                    },
                   }
                 }
               }
@@ -29,23 +47,7 @@ angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap', 'hljs', 'schemaFo
 
 
           $scope.form = [
-            "*",
-            {
-              type: 'actions',
-              items: [
-                {
-                  type: "submit",
-                  title: "Generate",
-                  style: 'btn-success'
-                },
-                {
-                  type: "button",
-                  title: "Reset",
-                  onClick: 'reset()'
-                }
-              ]
-            }
-            
+            "*"
           ];
 
           function init(){
@@ -68,6 +70,8 @@ angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap', 'hljs', 'schemaFo
           };
 
           $scope.generate = function(){
+            if($scope.app.models.length == 0)
+              return toaster.pop({ type: 'error', timeout: 3000, title: 'App needs at least one model.' });
             toaster.pop({ type: 'success', title: 'App being generated' });
             var app = JSON.stringify($scope.app);
             $state.go('generator.generated', { app: app });

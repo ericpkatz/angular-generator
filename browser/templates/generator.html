@@ -1,4 +1,10 @@
 <div>
-    <form ng-submit='generate()' sf-schema="schema" sf-form="form" sf-model="app"></form>
+  <form name='myForm'>
+      <div ng-submit='generate()' sf-schema="schema" sf-form="form" sf-model="app"></div>
+      <div class='form-group'>
+        <button ng-click='generate()' class='btn btn-primary' ng-disabled='myForm.$invalid'>Generate Code</button>
+        <button ng-click='reset()' class='btn btn-default'>Reset</button>
+      </div>
+  </form>
 </div>
 <ui-view></ui-view>
