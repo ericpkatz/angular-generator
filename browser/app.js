@@ -1,4 +1,4 @@
-angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap', 'hljs'])
+angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap', 'hljs', 'schemaForm'])
   .config(function($stateProvider, $urlRouterProvider){
     $stateProvider
       .state('home', {
@@ -32,12 +32,49 @@ angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap', 'hljs'])
         url: '/generator',
         templateUrl: '/browser/templates/generator.html',
         controller: function($scope, $state, $stateParams, toaster){
+          $scope.schema = {
+            type: "object",
+            properties: {
+              name: { type: "string", minLength: 2, title: "Name", description: "Application name." },
+              models: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    name: { type: "string", minLength: 2, title: "Name", description: "Model name." },
+                  }
+                }
+              }
+            }
+          };
+
+
+          $scope.form = [
+            "*",
+            {
+              type: 'actions',
+              items: [
+                {
+                  type: "submit",
+                  title: "Generate",
+                  style: 'btn-success'
+                },
+                {
+                  type: "button",
+                  title: "Reset",
+                  onClick: 'reset()'
+                }
+              ]
+            }
+            
+          ];
+
           function init(){
             $scope.app = {
               name: 'Foo',
-              model: {
-                name: 'Bar'
-              }
+              models: [
+                { name: 'Bar'}
+              ]
             };
           }
           init();

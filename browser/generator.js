@@ -4,6 +4,7 @@ angular.module('app')
       var camelCase = $window.camelCase;
       var deCamelCase = $window.deCamelCase;
       var inflect = $window.inflect;
+      app.model = app.models[0];
       return `
 <!DOCTYPE html>
 <html>
