@@ -92,6 +92,7 @@ angular.module('app')
           { id: 1, name: 'Foo' },
           { id: 2, name: 'Bar' }
         ];
+        var _items = ${model.data};
         return {
           items: _items,
           findById: function(id){

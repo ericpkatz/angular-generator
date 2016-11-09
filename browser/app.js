@@ -39,6 +39,10 @@ angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap', 'hljs', 'schemaFo
                       title: "Name",
                       pattern: "^[A-Za-z]+$"
                     },
+                    data: {
+                      type: "string",
+                      title: "Data"
+                    },
                   }
                 }
               }
@@ -49,12 +53,16 @@ angular.module('app', ['ui.router', 'toaster', 'ui.bootstrap', 'hljs', 'schemaFo
           $scope.form = [
             "*"
           ];
+          var defaultData = [
+            { id: 1, name: 'Moe'},
+            { id: 2, name: 'Larry'},
+          ];
 
           function init(){
             $scope.app = {
               name: 'Foo',
               models: [
-                { name: 'Bar'}
+                { name: 'Person', data: JSON.stringify(defaultData) } 
               ]
             };
           }
